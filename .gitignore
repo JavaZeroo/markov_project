@@ -1,3 +1,6 @@
+## Data
+*.csv
+
 ## Generated files
 .vscode
 PAPER.pdf
