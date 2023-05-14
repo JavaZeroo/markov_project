@@ -1,5 +1,7 @@
 ## Data
 *.csv
+code/data
+code/spy
 
 ## Generated files
 .vscode
@@ -289,3 +291,6 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+code/percent.jpg
+code/percent.png
+code/output.png
