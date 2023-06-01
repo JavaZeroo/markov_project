@@ -42,13 +42,19 @@
     of losses to claim sizes per fire, which may not be entirely accurate in real life situations. \
     Future research could further improve this model to increase its predictive accuracy and usefulness. \\
     All data is taken from GOV.UK, the official website of the UK government.\\
+    
     All Source code you can found in my \href{https://github.com/JavaZeroo/markov\_project}{Github: https://github.com/JavaZeroo/markov\_project}
+    
 
+    \vspace{5pt}
+    \textbf{Keywords}: Monte Carlo simulations, Log-normal distribution, Poisson distribution
+
+
+    \vspace{5pt}
+    \textbf{Word Count}: 2936
 
     % 美赛论文中无需注明关键字。若您一定要使用，
     % 请将以下两行的注释号 '%' 去除，以使其生效
-    \vspace{5pt}
-    \textbf{Keywords}: Monte Carlo simulations, Log-normal distribution, Poisson distribution
 
 \end{abstract}
 
@@ -199,7 +205,7 @@ and from Figure (\ref{fig:qq}) we can see that the points on the Q-Q plot fall r
 \end{figure}
 
 \subsubsection{Details about Model of House Price}
-We start with the assumption that house prices, when adjusted for inflation ($A_i$), are normally distributed. A normal distribution is parameterized by its mean ($\mu$) and variance ($\sigma^2$), and its probability density function (pdf) is given by:
+We start with the assumption that house prices, when adjusted for inflation ($A_i$), are normally distributed. A normal distribution is parameterized by its mean ($\mu$) and variance ($\sigma^2$), and its probability density function (pdf) is given by\textsuperscript{\cite{lognorm}}:
 
 \begin{equation}
 f(x|\mu, \sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
