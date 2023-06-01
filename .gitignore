@@ -2,6 +2,8 @@
 *.csv
 code/data
 code/spy
+*.jpg
+*.png
 
 ## Generated files
 .vscode
