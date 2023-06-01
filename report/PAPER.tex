@@ -9,6 +9,14 @@
 \usepackage{mathptmx}  % 这是 Times 字体，中规中矩 
 %\usepackage{mathpazo}  % 这是 COMAP 官方杂志采用的更好看的 Palatino 字体，可替代以上的 mathptmx 宏包
 
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+	colorlinks=true,
+	allcolors=black,
+	pdfstartview=Fit,
+	breaklinks=true}
+
+
 \title{Estimated Annual Size of Claims Arising from Fire}  % 标题
 
 % 如需要修改题头（默认为 MCM/ICM），请使用以下命令（此处修改为 MCM）
@@ -34,6 +42,8 @@
     of losses to claim sizes per fire, which may not be entirely accurate in real life situations. \
     Future research could further improve this model to increase its predictive accuracy and usefulness. \\
     All data is taken from GOV.UK, the official website of the UK government.\\
+    All Source code you can found in my \href{https://github.com/JavaZeroo/markov\_project}{Github: https://github.com/JavaZeroo/markov\_project}
+
 
     % 美赛论文中无需注明关键字。若您一定要使用，
     % 请将以下两行的注释号 '%' 去除，以使其生效
@@ -342,6 +352,11 @@ $$
 
 In summary, we first estimate the distribution of the total number of fires per year and the distribution of losses per fire by using some known distributions and assumptions. We then apply Monte Carlo simulations to estimate the distribution of the total losses due to fires per year. Finally, we calculate the distribution of claims due to fire per year based on the ratio between losses and claims
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{max.jpg}
+    \caption{This graph shows the total amount of fire claims due to fires per year predicted by our model based on data from the past 9 years, using the model's most probable value.}\label{fig:max}
+\end{figure}
 
 \subsection{Predict}
 We have chosen to use the ARIMA model to forecast the key parameters for our estimate of annual fire losses. The ARIMA model is a commonly used model for forecasting time series.\textsuperscript{\cite{arima4, arima, arima2, arima3}}
@@ -362,7 +377,7 @@ where $X_t$ is the time series, $B$ is the backward shift operator (i.e. $BX_t =
 
 \subsubsection{Forecasting Process}
 
-Our prediction process is twofold. First, we use the ARIMA model to forecast key parameters, including the frequency of fires, the loss per fire, and the ratio of losses to claims, among others. Our forecasting results are detailed in Table \ref{tb:pred}.
+Our prediction process is twofold. First, we use the ARIMA model to forecast key parameters, including the frequency of fires, the loss per fire, and the ratio of losses to claims, among others. Our forecasting results are detailed in Table \ref{tb:pred}.The final predicted distribution of fire claim amounts for 2023 can be seen in Figure (\ref{fig:pred})
 
 We then feed the predicted parameters into our previously constructed model, calculate the distribution of annual fire losses using Monte Carlo simulation, and finally derive the predicted distribution of annual fire losses for 2023.
 
@@ -370,8 +385,8 @@ It's worth noting the limitations of the ARIMA model. The model assumes that the
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{max.jpg}
-    \caption{This graph shows the total amount of fire claims due to fires per year predicted by our model based on data from the past 9 years, using the model's most probable value.}\label{fig:max}
+    \includegraphics[width=\textwidth]{pred.jpg}
+    \caption{This image shows the distribution of claim amounts by region}\label{fig:pred}
 \end{figure}
 
 \begin{table}[!htbp]
@@ -401,83 +416,64 @@ It's worth noting the limitations of the ARIMA model. The model assumes that the
 
 \section{Summary}
 
+Our proposed model provides an innovative approach to estimating and predicting annual fire insurance claims. By using different models for different components of the process, we are able to exert greater control over the various factors influencing fire-related insurance claims. In addition, the model provides a commendable degree of explanatory power in relation to the annual cost of fires.
+
+However, we recognise the inherent limitations. A number of assumptions have been made in constructing the model, which may limit its ability to capture every real world scenario. As a result, there may be some degree of discrepancy between the model's estimates and actual figures.
+
+We therefore believe that there is ample scope for further research, in particular to refine the estimates of the proportion of residential fires and the corresponding loss ratio. This nuanced approach would contribute to a more accurate and robust model, thereby enhancing its utility in predicting fire-related insurance claims.
+
+In conclusion, our model, while not without its limitations, represents a significant step forward in the field of predicting fire-related insurance claims. Further refinement, guided by real-world data and subsequent validation, would undoubtedly contribute to the evolution of this predictive model.
 
 \clearpage
 \bibliographystyle{unsrt}
 \bibliography{ref.bib}
 
-\begin{subappendices}  % 附录环境
+% \begin{subappendices}  % 附录环境
 
-\section{Appendix A: Further on \LaTeX}
-To clarify the importance of using \LaTeX\ in MCM or ICM, several points need to be covered, which are \ldots
+% \section{Appendix A: Further on \LaTeX}
+% To clarify the importance of using \LaTeX\ in MCM or ICM, several points need to be covered, which are \ldots
 
-To be more specific, \ldots
+% To be more specific, \ldots
 
-All in all, \ldots
+% All in all, \ldots
 
-Anyway, nobody \textbf{really} needs such appendix \ldots
+% Anyway, nobody \textbf{really} needs such appendix \ldots
 
-\section{Appendix B: Program Codes}
-Here are the program codes we used in our research.
+% \section{Appendix B: Program Codes}
+% Here are the program codes we used in our research.
 
-% 代码环境示例三则
-% 如您的论文不需要展示代码，请删除
-% 更多用法，请参考 listings 宏包文档
+% % 代码环境示例三则
+% % 如您的论文不需要展示代码，请删除
+% % 更多用法，请参考 listings 宏包文档
 
-% Python 代码示例
-\begin{lstlisting}[language=Python, name={test.py}]
-# Python code example
-for i in range(10):
-    print('Hello, world!')
-\end{lstlisting}
+% % Python 代码示例
+% \begin{lstlisting}[language=Python, name={test.py}]
+% # Python code example
+% for i in range(10):
+%     print('Hello, world!')
+% \end{lstlisting}
 
-% MATLAB 代码示例
-\begin{lstlisting}[language=MATLAB, name={test.m}]
-% MATLAB code example
-for i = 1:10
-    disp("hello, world!");
-end
-\end{lstlisting}
+% % MATLAB 代码示例
+% \begin{lstlisting}[language=MATLAB, name={test.m}]
+% % MATLAB code example
+% for i = 1:10
+%     disp("hello, world!");
+% end
+% \end{lstlisting}
 
-% C++ 代码示例
-\begin{lstlisting}[language=C++, name={test.cpp}]
-// C++ code example
-#include <iostream>
-using namespace std;
+% % C++ 代码示例
+% \begin{lstlisting}[language=C++, name={test.cpp}]
+% // C++ code example
+% #include <iostream>
+% using namespace std;
 
-int main() {
-    for (int i = 0; i < 10; i++)
-        cout << "hello, world" << endl;
-    return 0;
-}
-\end{lstlisting}
+% int main() {
+%     for (int i = 0; i < 10; i++)
+%         cout << "hello, world" << endl;
+%     return 0;
+% }
+% \end{lstlisting}
 
-\end{subappendices}  % 附录内容结束
+% \end{subappendices}  % 附录内容结束
 
 \end{document}  % 结束
-% 三线表示例
-% \begin{table}[!htbp]
-% \begin{center}
-% \caption{Notations}
-% \begin{tabular}{cl}
-%     \toprule
-%     \multicolumn{1}{m{3cm}}{\centering Year}
-%     &\multicolumn{1}{m{8cm}}{\centering Consumer Prices Index}
-%     \\
-%     \midrule
-%     $2011$ &    {\centering 93.4}\\
-%     $2012$ &96.1\\
-%     $2013$ &98.5\\
-%     $2014$ &100.0\\
-%     $2015$ &100.0\\
-%     $2016$ &100.7\\
-%     $2017$ &103.4\\
-%     $2018$ &105.9\\
-%     $2019$ &107.8\\
-%     $2020$ &108.7\\
-%     $2021$ &111.6\\
-%     $2022$ &121.7\\
-%     \bottomrule
-% \end{tabular}\label{tb:CPI}
-% \end{center}
-% \end{table}
