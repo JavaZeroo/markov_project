@@ -7,7 +7,7 @@
 \usepackage[209050796]{easymcm}  % 载入 EasyMCM 模板文件
 \problem{A}  % 请在此处填写题号
 \usepackage{mathptmx}  % 这是 Times 字体，中规中矩 
-%\usepackage{mathpazo}  % 这是 COMAP 官方杂志采用的更好看的 Palatino 字体，可替代以上的 mathptmx 宏包
+% \usepackage{mathpazo}  % 这是 COMAP 官方杂志采用的更好看的 Palatino 字体，可替代以上的 mathptmx 宏包
 
 \usepackage{hyperref}
 \hypersetup{hidelinks,
@@ -27,21 +27,8 @@
 
 % 此处填写摘要内容
 \begin{abstract}
-    The aim of this study is to construct a mathematical model based on Markov chains to predict \
-    the total size of claims paid by insurers in the UK (and specifically England) due to fires in \
-    the coming year. We split the regions of England into\ 
-    \emph{"South West", "South East", "London", "East of England", "East Midlands", "Yorkshire and The Humber", "North West", "West Midlands", "North East"} \ 
-    in order to obtain more refined predictions. First, we used house price data as a proxy for the \
-    size of the claim per fire, assuming a fixed ratio of damage to the size of the claim per fire. \
-    We then fitted the house price data with a log-normal distribution to obtain the distribution of \
-    each claim size. Next, we modelled the number of fires using a Poisson distribution with a high \
-    probability estimate. Finally, we use Monte Carlo simulations to estimate the size of the annual \
-    fire loss. Our model takes into account two key factors, the number of fires and the size of claims \
-    per fire, and provides insurers with an effective tool for predicting and managing fire insurance risk. \
-    However, there are some assumptions and limitations to our model, such as our assumption of a fixed ratio \
-    of losses to claim sizes per fire, which may not be entirely accurate in real life situations. \
-    Future research could further improve this model to increase its predictive accuracy and usefulness. \\
-    All data is taken from GOV.UK, the official website of the UK government.\\
+    The aim of this study is to construct a mathematical model to predict the total amount of claims paid by insurance companies in the UK (specifically England) due to fires in the coming year. The regions of England were divided into \emph{"South West", "South East", "London", "East of England", "East Midlands", "Yorkshire and The Humber", "North West", "West Midlands", "North East"} in order to obtain more refined predictions. Firstly, we used house price data as a proxy for the amount claimed per fire, assuming a fixed ratio of damage to the amount claimed per fire. We then fitted the house price data with a log-normal distribution to obtain the distribution of each claim amount. Next, we modelled the number of fires using a Poisson distribution with a high probability estimate. Finally, we use Monte Carlo simulations and ARIMA models to predict the amount of fire losses each year. Our model takes into account two key factors, the number of fire occurrences and the amount of claims per fire, and provides an effective tool for insurers to predict and manage fire insurance risk. However, there are some assumptions and limitations to our model, such as our assumption of a fixed ratio of losses to claim amounts per fire, which may not be entirely accurate in real life situations. Future research could further improve this model to increase its predictive accuracy and usefulness. \ 
+    All data are taken from the official UK government website gov.uk\textsuperscript{\cite{fireguide,guide}}. Experiments on the house price dataset show that the model performs well in terms of accuracy and generalisability. The article also describes the mathematical notation, techniques and tools used.
     
     All Source code you can found in my \href{https://github.com/JavaZeroo/markov\_project}{Github: https://github.com/JavaZeroo/markov\_project}
     
@@ -49,9 +36,6 @@
     \vspace{5pt}
     \textbf{Keywords}: Monte Carlo simulations, Log-normal distribution, Poisson distribution
 
-
-    \vspace{5pt}
-    \textbf{Word Count}: 2936
 
     % 美赛论文中无需注明关键字。若您一定要使用，
     % 请将以下两行的注释号 '%' 去除，以使其生效
@@ -434,7 +418,7 @@ In conclusion, our model, while not without its limitations, represents a signif
 \bibliographystyle{unsrt}
 \bibliography{ref.bib}
 
-% \begin{subappendices}  % 附录环境
+\begin{subappendices}  % 附录环境
 
 % \section{Appendix A: Further on \LaTeX}
 % To clarify the importance of using \LaTeX\ in MCM or ICM, several points need to be covered, which are \ldots
@@ -445,20 +429,100 @@ In conclusion, our model, while not without its limitations, represents a signif
 
 % Anyway, nobody \textbf{really} needs such appendix \ldots
 
-% \section{Appendix B: Program Codes}
+\section{Appendix A: Program Codes}
 % Here are the program codes we used in our research.
 
 % % 代码环境示例三则
 % % 如您的论文不需要展示代码，请删除
 % % 更多用法，请参考 listings 宏包文档
 
-% % Python 代码示例
-% \begin{lstlisting}[language=Python, name={test.py}]
-% # Python code example
-% for i in range(10):
-%     print('Hello, world!')
-% \end{lstlisting}
+% Python 代码示例
+\begin{lstlisting}[language=Python, name={simulate_fire_ratio}]
+def simulate_fire_ratio(poisson_all, 
+                        poisson_residential, 
+                        num_simulations=1000000):
+    # Calculate the probability of a fire occurring in a residence once
+    p = poisson_residential.args[0] / poisson_all.args[0]
+    
+    # Draw the number of all fires from the Poisson distribution
+    all_fires = poisson_all.rvs(num_simulations)
+    
+    # Simulate the number of all fires per year to determine 
+    # how many are residential fires
+    residential_fires = np.random.binomial(all_fires, p)
+    
+    # To prevent a division by 0 error, 
+    all_fires[all_fires == 0] = 1
+    
+    # Calculate the ratios
+    ratios = residential_fires / all_fires
+    
+    # Return the array of ratios
+    return ratios
+\end{lstlisting}
 
+\begin{lstlisting}[language=Python, name={calculate_S_pdf}]
+    def calculate_S_pdf(norm_dist, 
+    poisson_dist, 
+    offset_cliam, 
+    offset_fire_times, 
+    n_bins=1000):
+    # Generate possible values of S. 
+    
+    # Determine the maximum possible value of N 
+    # based on the quantile of the Poisson distribution    
+    max_n = int(poisson_dist.ppf(0.999))  
+    
+    # Range of N values
+    N_values = np.arange(0-offset_fire_times, max_n-offset_fire_times)  
+    # Range of X values
+    X_values = np.linspace(norm_dist.ppf(0.001)-offset_cliam, 
+                           norm_dist.ppf(0.999)-offset_cliam, 
+                           n_bins)  
+    
+    # Calculate the probability for each S value.
+    
+    # Probability of N
+    N_probs = poisson_dist.pmf(N_values+offset_fire_times)  
+    # Probability of X
+    X_probs = norm_dist.pdf(X_values+offset_cliam)  
+    # Probability of all possible S values
+    S_probs = np.outer(N_probs, X_probs)  
+    
+    # Calculate the probability density function of S
+    S_pdf = np.sum(S_probs, axis=0)
+    
+    return X_values, S_pdf
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, name={predict_house_price_mean}]
+    def predict_house_price_mean(r):
+
+        def create_ARMA_model(data, order=(2, 3, 0)):
+            # Convert data to time series
+            ts = pd.Series(data)
+            ts.index = pd.Index(pd.date_range('2011', 
+                                            periods=len(data), 
+                                            freq='Y'))
+
+            # fit model
+            model = ARIMA(ts, order=order)
+            model_fit = model.fit()
+
+            return model_fit
+
+        house_price = [] 
+        
+        for y in all_year:
+            house_price.append(np.mean(np.log(
+                search_region_and_year_house_prices(r, y)
+                )))
+
+        model = create_ARMA_model(house_price)
+        prediction = model.predict(start=len(house_price), 
+                                   end=len(house_price)+1)
+    return prediction
+\end{lstlisting}
 % % MATLAB 代码示例
 % \begin{lstlisting}[language=MATLAB, name={test.m}]
 % % MATLAB code example
@@ -480,6 +544,6 @@ In conclusion, our model, while not without its limitations, represents a signif
 % }
 % \end{lstlisting}
 
-% \end{subappendices}  % 附录内容结束
+\end{subappendices}  % 附录内容结束
 
 \end{document}  % 结束
